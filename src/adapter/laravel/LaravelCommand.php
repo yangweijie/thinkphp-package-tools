@@ -1,5 +1,5 @@
 <?php
-namespace yangweijie\thinkphpPackageTools\concerns\adapter\laravel;
+namespace yangweijie\thinkphpPackageTools\adapter\laravel;
 use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Console\View\Components\Factory;
 use InvalidArgumentException;

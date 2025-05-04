@@ -3,12 +3,12 @@
 namespace yangweijie\thinkphpPackageTools\command;
 
 use think\console\Command;
+use yangweijie\thinkphpPackageTools\adapter\laravel\LaravelCommand;
 use yangweijie\thinkphpPackageTools\commands\concerns\AskToRunMigrations;
 use yangweijie\thinkphpPackageTools\commands\concerns\AskToStarRepoOnGitHub;
 use yangweijie\thinkphpPackageTools\commands\concerns\PublishesResources;
 use yangweijie\thinkphpPackageTools\commands\concerns\SupportsServiceProviderInApp;
 use yangweijie\thinkphpPackageTools\commands\concerns\SupportsStartWithEndWith;
-use yangweijie\thinkphpPackageTools\concerns\adapter\laravel\LaravelCommand;
 use yangweijie\thinkphpPackageTools\Package;
 
 class InstallCommand extends Command

@@ -4,7 +4,7 @@ namespace yangweijie\thinkphpPackageTools;
 
 use ReflectionClass;
 use think\Service;
-use yangweijie\thinkphpPackageTools\concerns\adapter\laravel\LaravelService;
+use yangweijie\thinkphpPackageTools\adapter\laravel\LaravelService;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessAssets;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessBladeComponents;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessCommands;

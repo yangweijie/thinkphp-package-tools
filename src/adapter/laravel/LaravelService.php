@@ -1,6 +1,6 @@
 <?php
 
-namespace yangweijie\thinkphpPackageTools\concerns\adapter\laravel;
+namespace yangweijie\thinkphpPackageTools\adapter\laravel;
 
 
 trait LaravelService
