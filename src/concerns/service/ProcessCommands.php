@@ -11,10 +11,7 @@ trait ProcessCommands
         }
 
         // 注册 ThinkPHP 命令
-        foreach ($this->package->commands as $command) {
-            $this->app->console->addCommand(new $command());
-        }
-
+        $this->commands($this->package->commands);
         return $this;
     }
 }

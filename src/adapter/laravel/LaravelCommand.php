@@ -11,6 +11,7 @@ use think\console\input\Argument;
 use think\console\input\Option;
 use think\console\Output;
 use think\console\output\driver\Buffer;
+use think\console\Table;
 
 /**
  * Laravel命令适配器
@@ -24,6 +25,7 @@ use think\console\output\driver\Buffer;
 trait LaravelCommand
 {
     use InteractsWithIO;
+
     /**
      * 命令签名
      *
@@ -260,5 +262,17 @@ trait LaravelCommand
     public function callSilent(Command|string $command, array $arguments = []): Buffer|Output
     {
         return $this->call($command, $arguments, 'Nothing');
+    }
+
+    /**
+     * 输出表格
+     * @param Table $table
+     * @return string
+     */
+    protected function table(Table $table): string
+    {
+        $content = $table->render();
+        $this->output->writeln($content);
+        return $content;
     }
 }
