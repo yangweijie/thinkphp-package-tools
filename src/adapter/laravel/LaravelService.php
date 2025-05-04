@@ -2,7 +2,6 @@
 
 namespace yangweijie\thinkphpPackageTools\concerns\adapter\laravel;
 
-use think\Container;
 
 trait LaravelService
 {
