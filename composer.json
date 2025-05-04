@@ -9,9 +9,16 @@
             "src/helpers.php"
         ]
     },
+    "keywords": [
+        "yangweijie",
+        "thinkphp",
+        "thinkphp-package-tools"
+    ],
+    "homepage": "https://github.com/yangweijie/thinkphp-package-tools",
+    "license": "MIT",
     "authors": [
         {
-            "name": "jay",
+            "name": "yangweijie",
             "email": "917647288@qq.com"
         }
     ],
