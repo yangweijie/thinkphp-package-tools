@@ -34,7 +34,7 @@ trait SupportsServiceProviderInApp
             return $this;
         }
 
-        $this->callSilent('vendor:publish', ['--tag' => $this->package->shortName() . '-provider']);
+        $this->callSilent('vendor:pub', ['--tag' => $this->package->shortName() . '-service']);
 
         $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
 
