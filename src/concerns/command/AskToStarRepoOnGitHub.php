@@ -1,6 +1,6 @@
 <?php
 
-namespace yangweijie\thinkphpPackageTools\commands\concerns;
+namespace yangweijie\thinkphpPackageTools\concerns\command;
 
 trait AskToStarRepoOnGitHub
 {

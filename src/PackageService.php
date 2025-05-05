@@ -9,6 +9,7 @@ use yangweijie\thinkphpPackageTools\concerns\service\ProcessAssets;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessBladeComponents;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessCommands;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessConfigs;
+use yangweijie\thinkphpPackageTools\concerns\service\ProcessConsoleCommands;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessInertia;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessMigrations;
 use yangweijie\thinkphpPackageTools\concerns\service\ProcessRoutes;
@@ -25,6 +26,7 @@ abstract class PackageService extends Service
     use ProcessAssets;
     use ProcessBladeComponents;
     use ProcessCommands;
+    use ProcessConsoleCommands;
     use ProcessConfigs;
     use ProcessInertia;
     use ProcessMigrations;
@@ -62,6 +64,7 @@ abstract class PackageService extends Service
 
         $this->bootPackageConfig()
             ->bootPackageCommand()
+            ->bootPackageConsoleCommands()
             ->bootPackageMigration()
             ->bootPackageRoute()
             ->packageBooted();

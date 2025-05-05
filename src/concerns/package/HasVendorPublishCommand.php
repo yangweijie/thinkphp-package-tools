@@ -6,7 +6,7 @@ use yangweijie\thinkphpPackageTools\command\VendorPublishCommand;
 
 trait HasVendorPublishCommand
 {
-    public function VendorPublishCommand($callable): static
+    public function HasVendorPublishCommand($callable): static
     {
         $installCommand = new VendorPublishCommand($this);
 
