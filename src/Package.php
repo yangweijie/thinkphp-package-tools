@@ -13,6 +13,7 @@ use yangweijie\thinkphpPackageTools\concerns\package\HasMigration;
 use yangweijie\thinkphpPackageTools\concerns\package\HasRoute;
 use yangweijie\thinkphpPackageTools\concerns\package\HasService;
 use yangweijie\thinkphpPackageTools\concerns\package\HasTranslation;
+use yangweijie\thinkphpPackageTools\concerns\package\HasVendorPublishCommand;
 use yangweijie\thinkphpPackageTools\concerns\package\HasView;
 use yangweijie\thinkphpPackageTools\concerns\package\HasViewComposer;
 use yangweijie\thinkphpPackageTools\concerns\package\HasViewSharedData;
@@ -33,6 +34,7 @@ class Package
     use HasViewComposer;
     use HasView;
     use HasViewSharedData;
+    use HasVendorPublishCommand;
 
     public string $name;
     public string $basePath;
