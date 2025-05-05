@@ -11,10 +11,7 @@ class VendorPublishCommand extends Command
     use LaravelCommand;
 
     public function __construct(){
-        $this->signature = 'vendor:pub 
-                            {--force : 强制覆盖已存在的文件}
-                            {--provider= : 指定服务提供者}
-                            {--tag= : 指定标签}';
+        $this->signature = 'vendor:pub {--force : 强制覆盖已存在的文件} {--provider : 指定服务提供者} {--tag : 指定标签}';
         $this->description = '发布服务提供者的资源文件';
         parent::__construct();
     }

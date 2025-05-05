@@ -1,11 +1,14 @@
 <?php
 namespace yangweijie\thinkphpPackageTools\adapter\laravel;
 use Illuminate\Console\Concerns\InteractsWithIO;
+use Illuminate\Console\Parser;
 use Illuminate\Console\View\Components\Factory;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionMethod;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use think\console\Input;
 use think\console\input\Argument;
 use think\console\input\Option;
@@ -56,103 +59,51 @@ trait LaravelCommand
      */
     protected function configure(): void
     {
-        if (empty($this->signature)) {
-            throw new InvalidArgumentException('命令签名不能为空');
+        if (isset($this->signature)) {
+            $this->configureUsingFluentDefinition();
         }
-
-        // 解析命令签名
-        $parts = explode(' ', $this->signature);
-        $name = array_shift($parts);
-
-        // 设置命令名和描述
-        $this->setName($name)
-            ->setDescription($this->description ?? '');
-
-        // 解析参数和选项
-        $this->parseSignature($parts);
-    }
-
-    /**
-     * 解析命令签名中的参数和选项
-     *
-     * @param array $parts 签名部分
-     */
-    protected function parseSignature(array $parts): void
-    {
-        foreach ($parts as $part) {
-            // 处理选项 --option 或 {--option}
-            if (str_starts_with($part, '--') || (str_starts_with($part, '{--') && str_ends_with($part, '}'))) {
-                $this->addSignatureOption($part);
-            }
-            // 处理参数 {argument}
-            elseif (str_starts_with($part, '{') && str_ends_with($part, '}')) {
-                $this->addSignatureArgument($part);
-            }
+        if(isset($this->description)){
+            $this->setDescription($this->description);
         }
     }
 
     /**
-     * 添加签名中的选项
+     * Configure the console command using a fluent definition.
      *
-     * @param string $option 选项定义
+     * @return void
      */
-    protected function addSignatureOption(string $option): void
+    protected function configureUsingFluentDefinition(): void
     {
-        // 移除花括号
-        $option = trim($option, '{}');
-
-        // 移除前导的--
-        if (str_starts_with($option, '--')) {
-            $option = substr($option, 2);
+        [$name, $arguments, $options] = Parser::parse($this->signature);
+        $this->setName($name);
+        $thinkArguments = [];
+        foreach ($arguments as $argument) {
+            $thinkArguments[] = new Argument($argument->getName(), $this->getArgumentMode($argument), $argument->getDescription(), $argument->getDefault());
         }
-
-        // 解析选项名称、短名称和描述
-        $parts = explode('|', $option);
-        $name = $parts[0];
-        $shortName = $parts[1] ?? null;
-
-        // 检查是否有描述
-        $description = '';
-        if (str_contains($name, ' : ')) {
-            [$name, $description] = explode(' : ', $name, 2);
+        $this->getDefinition()->addArguments($thinkArguments);
+        $thinkOptions = [];
+        foreach ($options as $option) {
+            $thinkOptions[] = new Option($option->getName(), $option->getShortcut(), $this->getOptionMode($option), $option->getDescription(), $option->getDefault() == false? null : $option->getDefault());
         }
-
-        // 检查是否是必需选项
-        $mode = Option::VALUE_OPTIONAL;
-        if (str_ends_with($name, '=')) {
-            $name = rtrim($name, '=');
-            $mode = Option::VALUE_REQUIRED;
-        }
-
-        // 添加选项
-        $this->addOption($name, $shortName, $mode, $description);
+        $this->getDefinition()->addOptions($thinkOptions);
     }
 
-    /**
-     * 添加签名中的参数
-     *
-     * @param string $argument 参数定义
-     */
-    protected function addSignatureArgument(string $argument): void
+    protected function getArgumentMode(InputArgument $argument): int
     {
-        // 移除花括号
-        $argument = trim($argument, '{}');
-
-        // 解析参数名称和描述
-        $description = '';
-        if (str_contains($argument, ' : ')) {
-            [$argument, $description] = explode(' : ', $argument, 2);
+        if($argument->isRequired()){
+            return $argument->isArray()? Argument::REQUIRED | Argument::IS_ARRAY : Argument::REQUIRED;
+        }else{
+            return $argument->isArray()? Argument::OPTIONAL | Argument::IS_ARRAY : Argument::OPTIONAL;
         }
+    }
 
-        // 检查是否是可选参数
-        $mode = Argument::REQUIRED;
-        if (str_starts_with($argument, '?')) {
-            $argument = substr($argument, 1);
-            $mode = Argument::OPTIONAL;
+    protected function getOptionMode(InputOption $option): int
+    {
+        if($option->isValueOptional()){
+            return $option->isArray()? Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY : Option::VALUE_OPTIONAL;
+        }else{
+            return $option->isValueRequired()? Option::VALUE_REQUIRED : Option::VALUE_NONE;
         }
-
-        // 添加参数
-        $this->addArgument($argument, $mode, $description);
     }
 
     /**
@@ -236,14 +187,14 @@ trait LaravelCommand
                 $parameters[] = $value;
             } else {
                 // 选项参数
-                $key = '--' . ltrim($key, '-');
+                $key = ltrim($key, '-');
 
                 if (is_bool($value)) {
                     if ($value) {
                         $parameters[] = $key;
                     }
                 } else {
-                    $parameters[] = $key . '=' . $value;
+                    $parameters[$key] = $value;
                 }
             }
         }
